@@ -6,8 +6,7 @@ from dataclasses import dataclass
 import logging
 from typing import TYPE_CHECKING
 
-from homeassistant.exceptions import UpdateFailed
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import UPDATE_INTERVAL
 
