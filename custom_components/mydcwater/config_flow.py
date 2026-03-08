@@ -7,10 +7,7 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-
-from pymydcwater import AuthenticationError, MyDCWaterClient, MyDCWaterError
-
-from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlowWithConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
@@ -59,6 +56,8 @@ def _build_options_schema(defaults: dict[str, Any]) -> vol.Schema:
 
 
 def _validate_credentials(data: dict[str, Any]) -> ValidationResult:
+    from pymydcwater import AuthenticationError, MyDCWaterClient, MyDCWaterError
+
     client = MyDCWaterClient(login=data[CONF_USERNAME], password=data[CONF_PASSWORD])
     try:
         available_months = client.get_available_months()
@@ -81,8 +80,12 @@ async def async_validate_input(hass: HomeAssistant, data: dict[str, Any]) -> Val
     return await hass.async_add_executor_job(_validate_credentials, data)
 
 
-class MyDCWaterOptionsFlow(OptionsFlowWithConfigEntry):
+class MyDCWaterOptionsFlow(OptionsFlow):
     """Handle DC Water options."""
+
+    def __init__(self, config_entry: ConfigEntry) -> None:
+        """Initialize the options flow."""
+        self.config_entry = config_entry
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
         """Manage the options."""

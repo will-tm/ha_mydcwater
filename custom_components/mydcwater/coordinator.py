@@ -4,15 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import logging
-
-from pymydcwater import (
-    AccountInfo,
-    AuthenticationError,
-    DailyUsageRecord,
-    DailyUsageReport,
-    MyDCWaterClient,
-    MyDCWaterError,
-)
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.config_entries import ConfigEntryAuthFailed
 from homeassistant.exceptions import UpdateFailed
@@ -21,6 +13,9 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from .const import UPDATE_INTERVAL
 
 _LOGGER = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from pymydcwater import AccountInfo, DailyUsageRecord, DailyUsageReport
 
 
 @dataclass(frozen=True)
@@ -50,11 +45,15 @@ class MyDCWaterCoordinator(DataUpdateCoordinator[MyDCWaterSnapshot]):
             name="DC Water",
             update_interval=UPDATE_INTERVAL,
         )
+        from pymydcwater import MyDCWaterClient
+
         self._client = MyDCWaterClient(login=username, password=password)
         self.unit = unit
 
     async def _async_update_data(self) -> MyDCWaterSnapshot:
         """Fetch the latest reading from mydcwater."""
+        from pymydcwater import AuthenticationError, MyDCWaterError
+
         try:
             return await self.hass.async_add_executor_job(self._fetch_data)
         except AuthenticationError as err:

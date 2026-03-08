@@ -9,11 +9,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
 from .const import CONF_UNIT, DEFAULT_UNIT, DOMAIN, PLATFORMS
-from .coordinator import MyDCWaterCoordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up DC Water from a config entry."""
+    from .coordinator import MyDCWaterCoordinator
+
     coordinator = MyDCWaterCoordinator(
         hass,
         username=entry.data[CONF_USERNAME],
