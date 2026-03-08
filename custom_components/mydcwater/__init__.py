@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.config_entries import ConfigEntryAuthFailed
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
 from .const import CONF_UNIT, DEFAULT_UNIT, DOMAIN, PLATFORMS
+
+try:
+    from homeassistant.config_entries import ConfigEntryAuthFailed
+except ImportError:  # pragma: no cover - compatibility fallback
+    class ConfigEntryAuthFailed(Exception):
+        """Fallback auth error for older Home Assistant versions."""
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

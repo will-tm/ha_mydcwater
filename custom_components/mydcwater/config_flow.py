@@ -10,7 +10,6 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResult
 
 from .const import CONF_UNIT, DEFAULT_UNIT, DOMAIN, SUPPORTED_UNITS
 
@@ -87,7 +86,7 @@ class MyDCWaterOptionsFlow(OptionsFlow):
         """Initialize the options flow."""
         self.config_entry = config_entry
 
-    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> dict[str, Any]:
         """Manage the options."""
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
@@ -108,7 +107,7 @@ class MyDCWaterConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._reauth_entry: ConfigEntry | None = None
 
-    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> dict[str, Any]:
         """Handle the initial setup step."""
         errors: dict[str, str] = {}
 
@@ -133,14 +132,14 @@ class MyDCWaterConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(self, entry_data: dict[str, Any]) -> FlowResult:
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> dict[str, Any]:
         """Handle a reauthentication flow."""
         self._reauth_entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> dict[str, Any]:
         """Confirm updated credentials for an existing entry."""
         assert self._reauth_entry is not None
         errors: dict[str, str] = {}
