@@ -1,0 +1,15 @@
+*.log
+*.pyc
+.coverage
+.DS_Store
+.env
+.idea/
+.venv/
+.vscode/
+build/
+dist/
+htmlcov/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

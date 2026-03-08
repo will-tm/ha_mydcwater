@@ -1,0 +1,13 @@
+{
+  "domain": "mydcwater",
+  "name": "DC Water",
+  "codeowners": ["@will-tm"],
+  "config_flow": true,
+  "documentation": "https://github.com/will-tm/ha_mydcwater",
+  "issue_tracker": "https://github.com/will-tm/ha_mydcwater/issues",
+  "requirements": [
+    "pymydcwater@git+https://github.com/will-tm/pymydcwater.git@e3cf46be0197230de885343bc6e22f79b3215df5"
+  ],
+  "iot_class": "cloud_polling",
+  "version": "0.1.0"
+}

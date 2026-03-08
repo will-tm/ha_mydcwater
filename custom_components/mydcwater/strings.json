@@ -1,0 +1,61 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to DC Water",
+        "description": "Enter your mydcwater portal credentials.",
+        "data": {
+          "username": "User ID",
+          "password": "Password",
+          "unit": "Preferred unit"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect to DC Water",
+        "description": "Update the mydcwater credentials for this account.",
+        "data": {
+          "username": "User ID",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to mydcwater.",
+      "invalid_auth": "Invalid mydcwater credentials.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This DC Water account is already configured.",
+      "reauth_successful": "Reauthentication was successful."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "DC Water options",
+        "data": {
+          "unit": "Preferred unit"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "latest_meter_reading": {
+        "name": "Latest meter reading"
+      },
+      "latest_daily_usage": {
+        "name": "Latest daily usage"
+      },
+      "daily_average": {
+        "name": "Daily average"
+      },
+      "annual_average": {
+        "name": "Annual average"
+      },
+      "latest_reading_timestamp": {
+        "name": "Latest reading timestamp"
+      }
+    }
+  }
+}
