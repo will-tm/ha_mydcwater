@@ -49,9 +49,8 @@ class MyDCWaterCoordinator(DataUpdateCoordinator[MyDCWaterSnapshot]):
             name="DC Water",
             update_interval=UPDATE_INTERVAL,
         )
-        from pymydcwater import MyDCWaterClient
-
-        self._client = MyDCWaterClient(login=username, password=password)
+        self._username = username
+        self._password = password
         self.unit = unit
 
     async def _async_update_data(self) -> MyDCWaterSnapshot:
@@ -68,11 +67,16 @@ class MyDCWaterCoordinator(DataUpdateCoordinator[MyDCWaterSnapshot]):
             raise UpdateFailed(f"Unexpected mydcwater update error: {err}") from err
 
     def _fetch_data(self) -> MyDCWaterSnapshot:
-        months = self._client.get_available_months()
+        from pymydcwater import MyDCWaterClient
+
+        # The Huna usage endpoint depends on a signed portal context that can
+        # expire between hourly polls, so build a fresh client per refresh.
+        client = MyDCWaterClient(login=self._username, password=self._password)
+        months = client.get_available_months()
         if not months:
             raise RuntimeError("No billing months are available from mydcwater.")
 
-        report = self._client.get_daily_usage(months[-1].key, unit=self.unit)
+        report = client.get_daily_usage(months[-1].key, unit=self.unit)
         if not report.records:
             raise RuntimeError("The latest billing month did not include any meter readings.")
 
